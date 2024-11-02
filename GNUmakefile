@@ -31,6 +31,8 @@ run-x86_64: $(IMAGE_NAME).iso
 		-M q35 \
 		-bios /usr/share/ovmf/OVMF.fd \
 		-cdrom $(IMAGE_NAME).iso \
+		-d int \
+		-D qemu.log \
 		$(QEMUFLAGS)
 
 .PHONY: run-hdd-x86_64
@@ -72,7 +74,7 @@ kernel: kernel-deps
 $(IMAGE_NAME).iso: limine/limine kernel
 	rm -rf iso_root
 	mkdir -p iso_root/boot
-	cp -v kernel/bin-$(KARCH)/kernel iso_root/boot/
+	cp -v kernel/bin-$(KARCH)/iron iso_root/boot/
 	mkdir -p iso_root/boot/limine
 	cp -v limine.conf iso_root/boot/limine/
 	mkdir -p iso_root/EFI/BOOT
