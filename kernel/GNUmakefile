@@ -82,11 +82,10 @@ ifeq ($(KARCH),x86_64)
 endif
 
 # Architecture specific internal flags.
-ifeq ($(KARCH),x86_64)
-    ifeq ($(KCC_IS_CLANG),1)
-        override KCC += \
-            -target x86_64-unknown-none
-    endif
+ifeq ($(KCC_IS_CLANG),1)
+    override KCC += \
+        -target x86_64-unknown-none
+endif
     override KCFLAGS += \
         -m64 \
         -march=x86-64 \
@@ -100,46 +99,6 @@ ifeq ($(KARCH),x86_64)
         -m elf_x86_64
     override KNASMFLAGS += \
         -f elf64
-endif
-ifeq ($(KARCH),aarch64)
-    ifeq ($(KCC_IS_CLANG),1)
-        override KCC += \
-            -target aarch64-unknown-none
-    endif
-    override KCFLAGS += \
-        -mgeneral-regs-only
-    override KLDFLAGS += \
-        -m aarch64elf
-endif
-ifeq ($(KARCH),riscv64)
-    ifeq ($(KCC_IS_CLANG),1)
-        override KCC += \
-            -target riscv64-unknown-none
-        override KCFLAGS += \
-            -march=rv64imac
-    else
-        override KCFLAGS += \
-            -march=rv64imac_zicsr_zifencei
-    endif
-    override KCFLAGS += \
-        -mabi=lp64 \
-        -mno-relax
-    override KLDFLAGS += \
-        -m elf64lriscv \
-        --no-relax
-endif
-ifeq ($(KARCH),loongarch64)
-    ifeq ($(KCC_IS_CLANG),1)
-        override KCC += \
-            -target loongarch64-unknown-none
-    endif
-    override KCFLAGS += \
-        -march=loongarch64 \
-        -mabi=lp64s
-    override KLDFLAGS += \
-        -m elf64loongarch \
-        --no-relax
-endif
 
 # Internal linker flags that should not be changed by the user.
 override KLDFLAGS += \
