@@ -11,7 +11,7 @@ $(call USER_VARIABLE,KARCH,x86_64)
 # Default user QEMU flags. These are appended to the QEMU command calls.
 $(call USER_VARIABLE,QEMUFLAGS,-m 2G)
 
-override IMAGE_NAME := template-$(KARCH)
+override IMAGE_NAME := iron-$(KARCH)
 
 .PHONY: all
 all: $(IMAGE_NAME).iso
@@ -26,7 +26,7 @@ run: run-$(KARCH)
 run-hdd: run-hdd-$(KARCH)
 
 .PHONY: run-x86_64
-run-x86_64: ovmf/ovmf-code-$(KARCH).fd $(IMAGE_NAME).iso
+run-x86_64: $(IMAGE_NAME).iso
 	qemu-system-$(KARCH) \
 		-M q35 \
 		-bios /usr/share/ovmf/OVMF.fd \
@@ -34,7 +34,7 @@ run-x86_64: ovmf/ovmf-code-$(KARCH).fd $(IMAGE_NAME).iso
 		$(QEMUFLAGS)
 
 .PHONY: run-hdd-x86_64
-run-hdd-x86_64: ovmf/ovmf-code-$(KARCH).fd $(IMAGE_NAME).hdd
+run-hdd-x86_64: $(IMAGE_NAME).hdd
 	qemu-system-$(KARCH) \
 		-M q35 \
 		-bios /usr/share/ovmf/OVMF.fd \
@@ -55,11 +55,6 @@ run-hdd-bios: $(IMAGE_NAME).hdd
 		-M q35 \
 		-hda $(IMAGE_NAME).hdd \
 		$(QEMUFLAGS)
-
-ovmf/ovmf-code-$(KARCH).fd:
-	mkdir -p ovmf
-	curl -Lo $@ https://github.com/osdev0/edk2-ovmf-nightly/releases/latest/download/ovmf-code-$(KARCH).fd
-	esac
 
 limine/limine:
 	rm -rf limine
@@ -114,4 +109,4 @@ clean:
 .PHONY: distclean
 distclean:
 	$(MAKE) -C kernel distclean
-	rm -rf iso_root *.iso *.hdd kernel-deps limine ovmf
+	rm -rf iso_root *.iso *.hdd kernel-deps limine
