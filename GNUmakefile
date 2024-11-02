@@ -29,7 +29,7 @@ run-hdd: run-hdd-$(KARCH)
 run-x86_64: ovmf/ovmf-code-$(KARCH).fd $(IMAGE_NAME).iso
 	qemu-system-$(KARCH) \
 		-M q35 \
-		-drive if=pflash,unit=0,format=raw,file=ovmf/ovmf-code-$(KARCH).fd,readonly=on \
+		-bios /usr/share/ovmf/OVMF.fd \
 		-cdrom $(IMAGE_NAME).iso \
 		$(QEMUFLAGS)
 
